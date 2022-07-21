@@ -42,3 +42,44 @@ def is_win(char, field):
     if opponent_char not in diagonal and '_' not in diagonal:
         return True
     return False
+
+def minimax(board, depth, is_ai_turn):
+    if is_win(ai_char, board):
+        return scores[ai_char]
+    if is_win(user_char, board):
+        return scores[user_char]
+    if is_draw(board):
+        return scores['draw']
+    if is_ai_turn:
+        best_score = - sys.maxsize
+        for y in range(3):
+            for x in range(3):
+                if board[y][x] == '_':
+                    board[y][x] = ai_char
+                    score = minimax(board, depth + 1, user_turn)
+                    board[y][x] = '_'
+                    best_score = max(best_score, score)
+    else:
+        best_score = sys.maxsize
+        for y in range(3):
+            for x in range(3):
+                if board[y][x] == '_':
+                    board[y][x] = user_char
+                    score = minimax(board, depth + 1, ai_turn)
+                    board[y][x] = '_'
+                    best_score = min(best_score, score)
+    return best_score
+def get_computer_position(field):
+    move = None
+    best_score = -sys.maxsize
+    board = [field[y].copy() for y in range(3)]
+    for y in range(3):
+        for x in range(3):
+            if board[y][x] == '_':
+                board[y][x] = ai_char
+                score = minimax(board, 0, user_turn)
+                board[y][x] = '_'
+                if score > best_score:
+                    best_score = score
+                    move = (y, x)
+    return move
