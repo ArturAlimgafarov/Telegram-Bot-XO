@@ -123,3 +123,5 @@ def play(message):
     bot.send_message(chat_id=message.chat.id,
                      text=f'YOU: ❌\nBOT: ⭕️',
                      reply_markup=markup)
+
+bot.polling(none_stop=True)
